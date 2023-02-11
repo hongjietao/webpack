@@ -26,6 +26,15 @@ module.exports = {
         test: /\.less$/, // 解析 less
         use: ["style-loader", "css-loader", "less-loader"],
       },
+      {
+        test: /\.(jpe?g|svg|png|jpeg)$/, // 解析图片资源
+        type: "asset/resource", // webpack 5 解析资源方式
+        generator: {
+          // 指定输出路径
+          filename: "img/[hash][ext][query]",
+        },
+        // use: "file-loader", // 已过时，webpack4才使用
+      },
     ],
   },
 };
