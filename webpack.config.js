@@ -1,7 +1,7 @@
 "use strict";
 const path = require("path");
 
-module.export = {
+module.exports = {
   mode: "development",
   entry: {
     index: "./src/index.js",
@@ -9,7 +9,7 @@ module.export = {
   },
   output: {
     path: path.join(__dirname, "dist"),
-    filename: "[hash].js", // 通过占位符确保文件名称唯一
+    filename: "[name].js", // 通过占位符确保文件名称唯一
   },
 
   module: {
@@ -20,7 +20,11 @@ module.export = {
       },
       {
         test: /\.css$/, // 解析 css
-        use: ["style-loader", "css-loader", "less-loader"], // 链式调用，从右往左执行
+        use: ["style-loader", "css-loader"], // 链式调用，从右往左执行
+      },
+      {
+        test: /\.less$/, // 解析 less
+        use: ["style-loader", "css-loader", "less-loader"],
       },
     ],
   },

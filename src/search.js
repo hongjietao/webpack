@@ -1,8 +1,8 @@
 "use strict";
-import "./search.css";
+import "./search.less";
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 class Search extends React.Component {
   render() {
@@ -10,4 +10,5 @@ class Search extends React.Component {
   }
 }
 
-ReactDOM.render(<Search />, document.getElementById("root"));
+const root = createRoot(document.getElementById("root"));
+root.render(<Search />);
