@@ -9,8 +9,9 @@ class Search extends React.Component {
   render() {
     return (
       <div className="search-text">
-        Search Text
-        <img src={WebpackIcon} />
+        Search Text Search Text Search Text
+        <br />
+        <img className="img-size" src={WebpackIcon} />
       </div>
     );
   }

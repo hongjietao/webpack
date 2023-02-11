@@ -4,7 +4,8 @@
   "description": "learn webpack configuration",
   "private": "true",
   "scripts": {
-    "build": "webpack --mode=development"
+    "build": "webpack --mode=development",
+    "watch": "webpack --mode=development --watch"
   },
   "keywords": [
     "webpack",
