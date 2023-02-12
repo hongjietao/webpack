@@ -54,7 +54,8 @@ module.exports = {
   },
 
   plugins: [
-    new HotModuleReplacementPlugin(), // css 文件指纹
+    // new HotModuleReplacementPlugin(), webpack 5 不需要这个了
+    // css 文件指纹
     new MiniCssExtractPlugin({
       filename: "[name]_[contenthash:8].css",
     }),

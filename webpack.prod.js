@@ -2,6 +2,8 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -20,12 +22,44 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name]_[contenthash:8].css",
     }),
+    // 压缩 html 文件，一个页面对应一个 HtmlWebpackPlugin
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src/search.html"),
+      filename: "search.html",
+      chunks: ["search"],
+      inject: true,
+      minify: {
+        html5: true,
+        collapseWhitespace: true,
+        preserveLineBreaks: false,
+        minifyCSS: true,
+        minifyJS: true,
+        removeComments: false,
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src/index.html"),
+      filename: "index.html",
+      chunks: ["index"],
+      inject: true,
+      minify: {
+        html5: true,
+        collapseWhitespace: true,
+        preserveLineBreaks: false,
+        minifyCSS: true,
+        minifyJS: true,
+        removeComments: false,
+      },
+    }),
   ],
 
   optimization: {
+    minimize: true, // 可省略，默认最优配置：生产环境，压缩 true。开发环境，不压缩 false
     minimizer: [
       // 压缩css文件
       new CssMinimizerPlugin(),
+      // 压缩 js 文件
+      new TerserPlugin(),
     ],
   },
 
