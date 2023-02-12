@@ -1,6 +1,5 @@
 "use strict";
 const path = require("path");
-const { HotModuleReplacementPlugin } = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {

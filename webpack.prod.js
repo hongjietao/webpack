@@ -75,7 +75,19 @@ module.exports = {
       },
       {
         test: /\.less$/, // 解析 less
-        use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "less-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                plugins: ["autoprefixer"],
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(jpe?g|svg|png|jpeg)$/, // 解析图片资源
