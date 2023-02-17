@@ -2,8 +2,8 @@
 
 import React, { FC } from "react";
 import { createRoot } from "react-dom/client";
-import "./search.less";
-import WebpackIcon from "./assets/images/webpack-icon.svg";
+import "./index.less";
+import WebpackIcon from "../assets/images/webpack-icon.svg";
 
 const Search = () => {
   console.log("%c this is a message", "color:red;");
