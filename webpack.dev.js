@@ -1,13 +1,49 @@
 "use strict";
 const path = require("path");
+const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const setMPA = () => {
+  const entry = {};
+  const htmlWebpackPlugin = [];
+
+  const entryFiles = glob.sync("./src/*/index.js");
+  Object.keys(entryFiles).forEach((index) => {
+    const entryFile = entryFiles[index];
+    const match = entryFile.match(/src\/(.*)\/index\.js/);
+    const pageName = match && match[1];
+
+    entry[pageName] = entryFile;
+    htmlWebpackPlugin.push(
+      // 压缩 html 文件，一个页面对应一个 HtmlWebpackPlugin
+      new HtmlWebpackPlugin({
+        template: path.join(__dirname, `src/${pageName}/index.html`),
+        filename: `${pageName}.html`,
+        chunks: [`${pageName}`],
+        inject: true,
+        minify: {
+          html5: true,
+          collapseWhitespace: true,
+          preserveLineBreaks: false,
+          minifyCSS: true,
+          minifyJS: true,
+          removeComments: false,
+        },
+      })
+    );
+  });
+  return {
+    entry,
+    htmlWebpackPlugin,
+  };
+};
+
+const { entry, htmlWebpackPlugin } = setMPA();
 
 module.exports = {
   mode: "development",
-  entry: {
-    index: "./src/index.js",
-    search: "./src/search.js",
-  },
+  entry,
   output: {
     clean: true,
     path: path.join(__dirname, "dist"),
@@ -58,7 +94,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name]_[contenthash:8].css",
     }),
-  ],
+  ].concat(htmlWebpackPlugin),
   devServer: {
     // contentBase: "./dist", // webpack v4
     static: {
