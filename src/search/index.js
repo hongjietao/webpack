@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import "./index.less";
 import WebpackIcon from "../assets/images/webpack-icon.svg";
 import common from "../../common";
+import { a } from "./tree-shaking";
 
 const Search = () => {
   console.log("%c this is a message", "color:red;");
@@ -14,7 +15,7 @@ const Search = () => {
     "font-size:20px;",
     "color:blue;background:yellow;"
   );
-  common();
+
   return (
     <div className="search-text">
       Search Text Search Text Search Text666
