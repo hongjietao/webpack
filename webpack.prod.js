@@ -1,6 +1,7 @@
 "use strict";
 const glob = require("glob");
 const path = require("path");
+const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -59,6 +60,9 @@ module.exports = {
       filename: "[name]_[contenthash:8].css",
     }),
 
+    // scope hoisting
+    new webpack.optimize.ModuleConcatenationPlugin(),
+
     // 通过cdn引入，降低打包速度
     // new HtmlWebpackExternalsPlugin({
     //   externals: [
@@ -78,7 +82,7 @@ module.exports = {
   ].concat(htmlWebpackPlugin),
 
   optimization: {
-    minimize: true, // 可省略，默认最优配置：生产环境，压缩 true。开发环境，不压缩 false
+    // minimize: true, // 可省略，默认最优配置：生产环境，压缩 true。开发环境，不压缩 false
     minimizer: [
       // 压缩css文件
       new CssMinimizerPlugin(),
