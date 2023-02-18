@@ -1,6 +1,6 @@
 "use strict";
 
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.less";
 import WebpackIcon from "../assets/images/webpack-icon.svg";
@@ -13,28 +13,30 @@ const Search = () => {
   const handleLoadComponent = async () => {
     try {
       const element = document.createElement("div");
-      const newText = await import("./text");
+      const newText = await lazy(() => import("./text"));
       // element.innerHTML = <newText />;
       console.log("newText:", newText);
 
-      setText(newText.default);
+      setText(newText);
     } catch (e) {
       console.error(e.message);
     }
   };
 
   return (
-    <div className="search-text">
-      {Text ? <Text /> : null}
-      <br />
-      Search Text Search Text Search Text666
-      <br />
-      <img
-        className="img-size"
-        src={WebpackIcon}
-        onClick={handleLoadComponent}
-      />
-    </div>
+    <Suspense fallback={<div>loaidng</div>}>
+      <div className="search-text">
+        {Text ? <Text /> : null}
+        <br />
+        Search Text Search Text Search Text666
+        <br />
+        <img
+          className="img-size"
+          src={WebpackIcon}
+          onClick={handleLoadComponent}
+        />
+      </div>
+    </Suspense>
   );
 };
 
