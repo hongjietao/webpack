@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 
 const setMPA = () => {
   const entry = {};
@@ -22,7 +23,7 @@ const setMPA = () => {
       new HtmlWebpackPlugin({
         template: path.join(__dirname, `src/${pageName}/index.html`),
         filename: `${pageName}.html`,
-        chunks: [`${pageName}`],
+        chunks: ["vendors", pageName], // 在页面script中引用
         inject: true,
         minify: {
           html5: true,
@@ -57,6 +58,23 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name]_[contenthash:8].css",
     }),
+
+    // 通过cdn引入，降低打包速度
+    // new HtmlWebpackExternalsPlugin({
+    //   externals: [
+    //     {
+    //       module: "react",
+    //       entry: "https://unpkg.com/react@18/umd/react.production.min.js",
+    //       global: "React",
+    //     },
+    //     {
+    //       module: "react-dom",
+    //       entry:
+    //         "https://unpkg.com/react-dom@18/umd/react-dom.production.min.js",
+    //       global: "ReactDOM",
+    //     },
+    //   ],
+    // }),
   ].concat(htmlWebpackPlugin),
 
   optimization: {
@@ -67,6 +85,20 @@ module.exports = {
       // 压缩 js 文件
       new TerserPlugin(),
     ],
+
+    splitChunks: {
+      minSize: 0,
+      cacheGroups: {
+        commons: {
+          name: "commons",
+          chunks: "all",
+          minChunks: 2,
+          // test: /(react|react-dom)/,
+          // name: "vendors",
+          // chunks: "all",
+        },
+      },
+    },
   },
 
   module: {
