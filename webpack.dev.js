@@ -3,6 +3,7 @@ const path = require("path");
 const glob = require("glob");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
 
 const setMPA = () => {
   const entry = {};
@@ -94,6 +95,23 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name]_[contenthash:8].css",
     }),
+
+    // 通过cdn引入，降低打包速度
+    // new HtmlWebpackExternalsPlugin({
+    //   externals: [
+    //     {
+    //       module: "react",
+    //       entry: "https://unpkg.com/react@18/umd/react.production.min.js",
+    //       global: "React",
+    //     },
+    //     {
+    //       module: "react-dom",
+    //       entry:
+    //         "https://unpkg.com/react-dom@18/umd/react-dom.production.min.js",
+    //       global: "ReactDOM",
+    //     },
+    //   ],
+    // }),
   ].concat(htmlWebpackPlugin),
   devServer: {
     // contentBase: "./dist", // webpack v4
