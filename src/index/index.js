@@ -1,3 +1,4 @@
-import common from "../../common";
+import common from '../../common';
+
 common();
-console.log("this is index.js@@@!!!!");
+console.log('this is index.js@@@!!!!');

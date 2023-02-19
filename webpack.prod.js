@@ -1,18 +1,19 @@
-"use strict";
-const glob = require("glob");
-const path = require("path");
-const webpack = require("webpack");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin");
+'use strict';
+const glob = require('glob');
+const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const setMPA = () => {
   const entry = {};
   const htmlWebpackPlugin = [];
 
-  const entryFiles = glob.sync("./src/*/index.js");
+  const entryFiles = glob.sync('./src/*/index.js');
   Object.keys(entryFiles).forEach((index) => {
     const entryFile = entryFiles[index];
     const match = entryFile.match(/src\/(.*)\/index\.js/);
@@ -24,7 +25,7 @@ const setMPA = () => {
       new HtmlWebpackPlugin({
         template: path.join(__dirname, `src/${pageName}/index.html`),
         filename: `${pageName}.html`,
-        chunks: ["vendors", pageName], // 在页面script中引用
+        chunks: ['vendors', pageName], // 在页面script中引用
         inject: true,
         minify: {
           html5: true,
@@ -34,7 +35,7 @@ const setMPA = () => {
           minifyJS: true,
           removeComments: false,
         },
-      })
+      }),
     );
   });
   return {
@@ -46,39 +47,42 @@ const setMPA = () => {
 const { entry, htmlWebpackPlugin } = setMPA();
 
 module.exports = {
-  mode: "production",
+  mode: 'production',
   entry,
   output: {
     clean: true,
-    path: path.join(__dirname, "dist"),
-    filename: "[name]_[chunkhash:8].js",
+    path: path.join(__dirname, 'dist'),
+    filename: '[name]_[chunkhash:8].js',
   },
 
   plugins: [
     // css 文件指纹
     new MiniCssExtractPlugin({
-      filename: "[name]_[contenthash:8].css",
+      filename: '[name]_[contenthash:8].css',
     }),
 
     // scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
 
+    // eslint-loader 已被废弃
+    new ESLintPlugin(),
+
     // 通过cdn引入，降低打包速度
-    // new HtmlWebpackExternalsPlugin({
-    //   externals: [
-    //     {
-    //       module: "react",
-    //       entry: "https://unpkg.com/react@18/umd/react.production.min.js",
-    //       global: "React",
-    //     },
-    //     {
-    //       module: "react-dom",
-    //       entry:
-    //         "https://unpkg.com/react-dom@18/umd/react-dom.production.min.js",
-    //       global: "ReactDOM",
-    //     },
-    //   ],
-    // }),
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          module: 'react',
+          entry: 'https://unpkg.com/react@18/umd/react.production.min.js',
+          global: 'React',
+        },
+        {
+          module: 'react-dom',
+          entry:
+            'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
+          global: 'ReactDOM',
+        },
+      ],
+    }),
   ].concat(htmlWebpackPlugin),
 
   optimization: {
@@ -94,8 +98,8 @@ module.exports = {
       minSize: 0,
       cacheGroups: {
         commons: {
-          name: "commons",
-          chunks: "all",
+          name: 'commons',
+          chunks: 'all',
           minChunks: 2,
           // test: /(react|react-dom)/,
           // name: "vendors",
@@ -109,23 +113,24 @@ module.exports = {
     rules: [
       {
         test: /\.js$/, // test 指定匹配规则
-        use: "babel-loader", // use 指定使用的loader
+        exclude: /node_modules/,
+        use: ['babel-loader'], // use 指定使用的loader
       },
       {
         test: /\.css$/, // 解析 css
-        use: [MiniCssExtractPlugin.loader, "css-loader"], // 链式调用，从右往左执行
+        use: [MiniCssExtractPlugin.loader, 'css-loader'], // 链式调用，从右往左执行
       },
       {
         test: /\.less$/, // 解析 less
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
-          "less-loader",
+          'css-loader',
+          'less-loader',
           {
-            loader: "postcss-loader",
+            loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: ["autoprefixer"],
+                plugins: ['autoprefixer'],
               },
             },
           },
@@ -133,10 +138,10 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|svg|png|jpeg)$/, // 解析图片资源
-        type: "asset/resource", // webpack 5 解析资源方式
+        type: 'asset/resource', // webpack 5 解析资源方式
         generator: {
           // 指定输出路径
-          filename: "img/[name]_[hash:8][ext]",
+          filename: 'img/[name]_[hash:8][ext]',
         },
         // use: "file-loader", // 已过时，webpack4才使用
       },
