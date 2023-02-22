@@ -23,5 +23,6 @@ module.exports = {
     'lit-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'arrow-body-style': 'off',
+    'no-console': 'off',
   },
 };
