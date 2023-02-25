@@ -1,4 +1,6 @@
+/* eslint-disable strict */
 'use strict';
+
 const glob = require('glob');
 const path = require('path');
 const webpack = require('webpack');
@@ -8,6 +10,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 const setMPA = () => {
   const entry = {};
@@ -83,6 +86,8 @@ module.exports = {
         },
       ],
     }),
+
+    new FriendlyErrorsWebpackPlugin(),
   ].concat(htmlWebpackPlugin),
 
   optimization: {
@@ -147,4 +152,6 @@ module.exports = {
       },
     ],
   },
+
+  stats: 'errors-only',
 };

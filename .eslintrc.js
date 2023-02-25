@@ -24,5 +24,6 @@ module.exports = {
     'jsx-a11y/no-noninteractive-element-interactions': 'off',
     'arrow-body-style': 'off',
     'no-console': 'off',
+    'lines-around-directive': 'off',
   },
 };

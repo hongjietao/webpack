@@ -4,6 +4,7 @@ const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 const setMPA = () => {
   const entry = {};
@@ -112,6 +113,7 @@ module.exports = {
         },
       ],
     }),
+    new FriendlyErrorsWebpackPlugin(),
   ].concat(htmlWebpackPlugin),
   devServer: {
     // contentBase: "./dist", // webpack v4
@@ -120,4 +122,5 @@ module.exports = {
     },
     hot: true,
   },
+  stats: 'errors-only',
 };
