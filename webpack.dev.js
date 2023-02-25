@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 'use strict';
 const path = require('path');
 const glob = require('glob');
