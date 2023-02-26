@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const setMPA = () => {
   const entry = {};
@@ -100,6 +101,7 @@ module.exports = {
         }
       });
     },
+    new BundleAnalyzerPlugin(),
   ].concat(htmlWebpackPlugin),
 
   optimization: {
